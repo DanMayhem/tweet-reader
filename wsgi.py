@@ -6,7 +6,7 @@ wsgi module
 from werkzeug.serving import run_simple
 from werkzeug.wsgi import DispatcherMiddleware
 
-from nnr.web import create_app
+from tweet_reader.web import create_app
 
 application = DispatcherMiddleware(create_app())
 
