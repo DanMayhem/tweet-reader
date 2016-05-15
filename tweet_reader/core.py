@@ -20,7 +20,6 @@ def create_app(package_name):
     app.debug = True
 
   app.config['CSRF_ENABLED'] = True
-  app.config['SECRET_KEY'] = environ.get('SECRET_KEY')
 
   flask_sslify.SSLify(app)
   flask.ext.heroku.Heroku(app)
