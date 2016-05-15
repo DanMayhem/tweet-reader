@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% macro render_movie(movie) %}
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <div class="row">
+        <div class="panel-title col-xs-10">
+          <a href="{{movie.link}}">{{movie.title}}</a>
+        </div>
+        <div class="panel-title col-xs-2 text-right">
+          <a href="{{url_for('.remove', movie_id=movie.id)}}">
+            <span class="glyphicon glyphicon-remove"/>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="panel-body row">
+      <div class="col-md-2">
+        <img src="{{movie.img}}"/>
+      </div>
+      <div class="col-md-5">
+        {{movie.description}}
+      </div>
+      <div class="col-md-5">
+        <iframe width="250" height="150" src="https://www.youtube.com/embed/{{movie.trailer}}" frameborder="0" allowfullscreen >
+        </iframe>
+      </div>
+    </div>
+  </div>
+{% endmacro %}
+
+
+{% block main_content %}
+  <div class="row">
+    <div class="col-md-offset-2 col-md-8">
+      {% for movie in movies %}
+        {{render_movie(movie)}}
+      {%endfor%}
+  </div>
+{% endblock %}
