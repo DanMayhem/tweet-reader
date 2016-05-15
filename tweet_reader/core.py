@@ -3,7 +3,6 @@
 from os import environ
 
 import flask
-import flask_sslify
 import flask.ext.heroku
 
 from flask.ext.login import LoginManager
@@ -23,7 +22,6 @@ def create_app(package_name):
 
   app.config['MONGO_URI'] = environ.get('MONGODB_URI')
 
-  flask_sslify.SSLify(app)
   flask.ext.heroku.Heroku(app)
 
   login_manager.init_app(app)
