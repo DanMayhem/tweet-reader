@@ -47,6 +47,7 @@ def authorized():
     u = User(resp['screen_name'])
     u.twitter_token = resp['oauth_token']
     u.twitter_secret = resp['oauth_token_secret']
+    u.fetch_twitter_details()
     u.save()
 
     flask.flash("Welcome @{username}".format(username=u.username),'success')
