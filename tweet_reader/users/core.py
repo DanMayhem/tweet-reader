@@ -5,7 +5,7 @@
 from ..core import login_manager
 from ..core import mongo
 
-from .model import User
+from .models import User
 
 @login_manager.user_loader
 def load_user(username):

@@ -5,15 +5,20 @@
     <h1>Tweet Speech</h1>
 
     <p>
-      Select keywords and geographic location an pull live,
+      Select keywords and geographic location to pull live,
       streaming tweets as they happen and have them read by
       your computer. Perfect for art projects, or making
-      it sound like someone is home when, really, no one is
+      it sound like someone is home when &mdash; really &mdash; no one is
       home!
     </p>
     <p>
-      Get started by logging in with
-      <a href="/">Twitter</a>.
+      To get started
+      <a href="{{url_for('users.login')}}">
+        <img
+          src={{url_for('static',filename='images/sign-in-with-twitter-gray.png')}}
+          alt='Sign in with Twitter'
+        />
+      </a>
     </p>
 
   </div>

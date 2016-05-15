@@ -1,3 +1,3 @@
 #!python
 
-from .core import users
+from .core import User

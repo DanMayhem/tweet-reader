@@ -19,8 +19,12 @@ def create_app(package_name):
     app.debug = True
 
   app.config['CSRF_ENABLED'] = True
+  app.config['SECRET_KEY'] = environ.get('SECRET_KEY')
 
   app.config['MONGO_URI'] = environ.get('MONGODB_URI')
+  #app.config['CONSUMER_KEY'] = environ.get('CONSUMER_KEY')
+  #app.config['CONSUMER_SECRET'] = environ.get('CONSUMER_SECRET')
+
 
   flask.ext.heroku.Heroku(app)
 
