@@ -21,6 +21,8 @@ def create_app(package_name):
 
   app.config['CSRF_ENABLED'] = True
 
+  app.config['MONGO_URI'] = environ.get('MONGODB_URI')
+
   flask_sslify.SSLify(app)
   flask.ext.heroku.Heroku(app)
 
