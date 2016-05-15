@@ -5,13 +5,14 @@ from os import environ
 import flask
 import flask_sslify
 import flask.ext.heroku
-#import flask.ext.sqlalchemy
 
 from flask.ext.login import LoginManager
+from flask.ext.pymongo import PyMongo
 from flask_oauthlib.client import OAuth
 
 login_manager = LoginManager()
 oauth = OAuth()
+mongo = PyMongo()
 
 def create_app(package_name):
   app = flask.Flask(package_name)
@@ -26,5 +27,6 @@ def create_app(package_name):
 
   login_manager.init_app(app)
   oauth.init_app(app)
+  mongo.init_app(app)
 
   return app
