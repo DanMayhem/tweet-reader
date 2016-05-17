@@ -13,4 +13,11 @@ class CampaignForm(w.Form):
     ],
   )
 
+  longitude = f.DecimalField(
+    'Latitude',
+    validators=[
+      v.
+    ]
+  )
+
   submit = f.SubmitField('Submit')
