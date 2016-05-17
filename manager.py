@@ -14,6 +14,7 @@ manager = flask.ext.script.Manager(app)
 
 @manager.command
 def list_users():
+  'print list of registered users'
   for u in mongo.db.users.find():
     print("@{username}".format(username=u['_id']))
 
