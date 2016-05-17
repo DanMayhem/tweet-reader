@@ -12,3 +12,5 @@ class CampaignForm(w.Form):
       v.InputRequired('Search Key is a required field')
     ],
   )
+
+  submit = f.SubmitField('Submit')

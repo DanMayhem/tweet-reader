@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% import 'bootstrap/wtf.html' as wtf %}
+
 {% macro render_movie(movie) %}
   <div class="panel panel-primary">
     <div class="panel-heading">
@@ -33,8 +35,13 @@
 {% block main_content %}
   <div class="row">
     <div class="col-md-offset-2 col-md-8">
-      {% for movie in movies %}
-        {{render_movie(movie)}}
-      {%endfor%}
+      {{
+        wtf.quick_form(
+          form=form,
+          form_type='basic',
+          button_map={'submit': 'primary'}
+        )
+      }}
+    </div>
   </div>
 {% endblock %}
