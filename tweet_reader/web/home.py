@@ -9,10 +9,12 @@ from .forms import CampaignForm
 
 bp = flask.Blueprint("home", __name__)
 
-@bp.route("/", method=['GET','POST'])
-@bp.route("/index.html", method=['GET','POST'])
-@bp.route("/index", method=['GET','POST'])
+@bp.route("/", methods=['GET','POST'])
+@bp.route("/index.html", methods=['GET','POST'])
+@bp.route("/index", methods=['GET','POST'])
 def index():
   if current_user.is_authenticated:
-    return flask.render_template("home.html", form=CampaignForm())
+    campaign_form = CampaignForm()
+    campaign_form.validate_on_submit()
+    return flask.render_template("home.html", form=campaign_form)
   return flask.render_template("landing.html")
