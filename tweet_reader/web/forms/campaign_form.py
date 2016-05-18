@@ -13,10 +13,25 @@ class CampaignForm(w.Form):
     ],
   )
 
-  longitude = f.DecimalField(
-    'Latitude',
+  latitiude = f.DecimalField(
+    'Latitiude',
     validators=[
-      v.
+      v.NumberRange(min=-180, max=180),
+    ]
+  )
+
+  longitude = f.DecimalField(
+    'Longitude',
+    validators=[
+      v.NumberRange(min=-180, max=180),
+    ]
+  )
+
+  radius = f.DecimalField(
+    'Radius (mi)',
+    validators = [
+      v.NumberRange(min=0),
+      v.NoneOf([0,]),
     ]
   )
 
