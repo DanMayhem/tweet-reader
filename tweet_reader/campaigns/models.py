@@ -25,6 +25,7 @@ class Campaign(object):
     self.latitude = None
     self.longitude = None
     self.radius = None
+    self.owner = None
 
     if self.key is None:
       self.key = _gen_key
@@ -37,6 +38,7 @@ class Campaign(object):
       self.latitude = c['latitude']
       self.longitude = c['longitude']
       self.radius = c['radius']
+      self.owner = c['owner']
 
   def save(self):
     mongo.db.campaigns.update_one(
@@ -46,7 +48,8 @@ class Campaign(object):
         'search': self.search,
         'latitude': self.latitude,
         'longitude': self.longitude,
-        'radius': self.radius
+        'radius': self.radius,
+        'owner': self.owner
       }},
       upsert=True
     )
