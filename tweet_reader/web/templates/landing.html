@@ -1,25 +1,40 @@
 {% extends "base.html" %}
 
 {% block main_content %}
-  <div class="center jumbotron">
-    <h1>Tweet Speech</h1>
-
-    <p>
-      Select keywords and geographic location to pull live,
-      streaming tweets as they happen and have them read by
-      your computer. Perfect for art projects, or making
-      it sound like someone is home when &mdash; really &mdash; no one is
-      home!
-    </p>
-    <p>
-      To get started
-      <a href="{{url_for('users.login')}}">
-        <img
-          src={{url_for('static',filename='images/sign-in-with-twitter-gray.png')}}
-          alt='Sign in with Twitter'
-        />
-      </a>
-    </p>
-
+  <div class="jumbotron">
+    <div class="container">
+      <h2 class="text-center text-primary">
+        Tweet Speech
+        <br/>
+        <small>Monitor Twitter and read live, streaming tweets aloud</small>
+      </h2>
+    </div>
+  </div>
+  <!--open new container for base template-->
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-4">
+        <h3 class="text-muted">Twitter Integration</h3>
+        <div>
+          Integrated with your Twitter account. To make it easy to log in, and
+          keep track of your streams. We'll never tweet without your permission.
+        </div>
+      </div>
+      <div class="col-md-4">
+        <h3 class="text-muted">Flexible Search</h3>
+        <div>
+          Allows searching based on one or more keywords or hashtags. As well as
+          limiting your searches geographically to really focus in on the tweets
+          that you and your audience are interested in.
+        </div>
+      </div>
+      <div class="col-md-4">
+        <h3 class="text-muted">Lorem Ipsum</h3>
+        <div>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus odio
+          nisl, aliquam eget sapien eleifend, mattis imperdiet nunc. 
+        </div>
+      </div>
+    </div>
   </div>
 {% endblock %}

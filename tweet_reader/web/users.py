@@ -50,8 +50,6 @@ def authorized():
     u.fetch_twitter_details()
     u.save()
 
-    flask.flash("Welcome @{username}".format(username=u.username),'success')
-
     flask.ext.login.login_user(u, remember=True)
 
   return flask.redirect(flask.url_for('users.index'))
