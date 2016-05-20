@@ -18,5 +18,18 @@ def list_users():
   for u in mongo.db.users.find():
     print("@{username}".format(username=u['_id']))
 
+@manager.command
+def list_camps():
+  'print list of campaigns'
+  for c in mongo.db.campaigns.find():
+    print("{key} @{username}: '{search} [{lat}, {long}, {rad}]'".format({
+      'key': c['_id'],
+      'username': c['owner'],
+      'search': c['search'],
+      'lat': c['latitude'],
+      'long': c['longitude'],
+      'rad': c['radius'],
+    }))
+
 if __name__=="__main__":
   manager.run()
