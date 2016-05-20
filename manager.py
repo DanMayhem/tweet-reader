@@ -22,14 +22,13 @@ def list_users():
 def list_camps():
   'print list of campaigns'
   for c in mongo.db.campaigns.find():
-    print("{key} @{username}: '{search} [{lat}, {long}, {rad}]'".format({
-      'key': c['_id'],
-      'username': c['owner'],
-      'search': c['search'],
-      'lat': c['latitude'],
-      'long': c['longitude'],
-      'rad': c['radius'],
-    }))
+    if 'latitude' not in c:
+      c['latitude'] = 'n/a'
+    if 'longitude' not in c:
+      c['longitude'] = 'n/a'
+    if 'radius' not in c:
+      c['radius'] = 'n/a'
+    print("{_id} @{owner}: '{search} [{latitude}, {longitude}, {radius}]'".format_map(c))
 
 if __name__=="__main__":
   manager.run()

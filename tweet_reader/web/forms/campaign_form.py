@@ -13,7 +13,7 @@ class CampaignForm(w.Form):
     ],
   )
 
-  latitiude = f.DecimalField(
+  latitude = f.FloatField(
     'Latitiude',
     validators=[
       v.Optional(),
@@ -21,7 +21,7 @@ class CampaignForm(w.Form):
     ]
   )
 
-  longitude = f.DecimalField(
+  longitude = f.FloatField(
     'Longitude',
     validators=[
       v.Optional(),
@@ -29,7 +29,7 @@ class CampaignForm(w.Form):
     ]
   )
 
-  radius = f.DecimalField(
+  radius = f.FloatField(
     'Radius (mi)',
     validators = [
       v.Optional(),

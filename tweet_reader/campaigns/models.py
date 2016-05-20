@@ -28,9 +28,9 @@ class Campaign(object):
     self.owner = None
 
     if self.key is None:
-      self.key = _gen_key
-      while (self.key in mongo.db.campaigns):
-        self.key = _gen_key
+      self.key = _gen_key()
+      while (mongo.db.campaigns.find_one({'_id': self.key}) is not None):
+        self.key = _gen_key()
 
     c = mongo.db.campaings.find_one({'_id': self.key})
     if c is not None:
