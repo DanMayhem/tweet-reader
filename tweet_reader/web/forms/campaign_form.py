@@ -18,7 +18,8 @@ class CampaignForm(w.Form):
     validators=[
       v.Optional(),
       v.NumberRange(min=-180, max=180),
-    ]
+    ],
+    id='latitude',
   )
 
   longitude = f.FloatField(
@@ -26,7 +27,8 @@ class CampaignForm(w.Form):
     validators=[
       v.Optional(),
       v.NumberRange(min=-180, max=180),
-    ]
+    ],
+    id='longitude',
   )
 
   radius = f.FloatField(
@@ -35,7 +37,8 @@ class CampaignForm(w.Form):
       v.Optional(),
       v.NumberRange(min=0),
       v.NoneOf([0,]),
-    ]
+    ],
+    id='radius',
   )
 
   submit = f.SubmitField('Submit')

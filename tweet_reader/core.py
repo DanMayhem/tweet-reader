@@ -8,6 +8,7 @@ import flask.ext.heroku
 from flask.ext.login import LoginManager
 from flask.ext.pymongo import PyMongo
 from flask_oauthlib.client import OAuth
+from flask_sslify import SSLify
 
 login_manager = LoginManager()
 oauth = OAuth()
@@ -31,5 +32,6 @@ def create_app(package_name):
   login_manager.init_app(app)
   oauth.init_app(app)
   mongo.init_app(app)
+  SSLify(app)
 
   return app
