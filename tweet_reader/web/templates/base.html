@@ -38,4 +38,6 @@
 
 {% block scripts %}
   {{super()}}
-{%endblock scripts%}
+  {% block page_scripts %}
+  {% endblock page_scripts %}
+{% endblock scripts %}
