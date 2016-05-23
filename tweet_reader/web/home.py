@@ -32,5 +32,8 @@ def index():
 @bp.route("/observe/<string:key>")
 def observe(key):
   c = Campaign(key)
+  if c is None:
+    flask.flash('Invalid Campaign {key}'.format(key=key), 'danger')
+    return flask.redirect(flask.url_for('.index'))
   flask.flash('campaign {key}'.format(key=c.key), 'success')
-  return flask.render_template('home.html', form=CampaignForm())
+  return flask.render_template('observe.html', camp_key=key)
