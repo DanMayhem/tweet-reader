@@ -32,6 +32,6 @@ def create_app(package_name):
   login_manager.init_app(app)
   oauth.init_app(app)
   mongo.init_app(app)
-  #SSLify(app)
+  SSLify(app)
 
   return app
