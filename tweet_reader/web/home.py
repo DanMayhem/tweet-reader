@@ -5,7 +5,7 @@ import flask
 
 from flask.ext.login import login_required, current_user
 
-from ..campaigns import Campaign
+from ..campaigns import Campaign, find_campaign
 
 from .forms import CampaignForm
 
@@ -31,9 +31,21 @@ def index():
 
 @bp.route("/observe/<string:key>")
 def observe(key):
-  c = Campaign(key)
+  c = find_campaign(key)
   if c is None:
     flask.flash('Invalid Campaign {key}'.format(key=key), 'danger')
     return flask.redirect(flask.url_for('.index'))
   flask.flash('campaign {key}'.format(key=c.key), 'success')
   return flask.render_template('observe.html', camp_key=key)
+
+def _wrap_tweets(camp):
+  ts = tweets.TweetStream()
+  for tweet in ts:
+    yield 'data: {tweet_json}\n\n'.format(tweet_json=tweet)
+
+@bp.route("/campaigns/<string:key>/tweets")
+def tweets(key):
+  c = find_campaign(key)
+  if c is None:
+    flask.abort(404)
+  return flask.Response()

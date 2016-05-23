@@ -1,2 +1,2 @@
 #!python
-from .models import Campaign
+from .models import Campaign, find_campaign

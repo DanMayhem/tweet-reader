@@ -17,8 +17,21 @@
   <script type="text/babel">
     var TweetDisplay = React.createClass({
       render: function() {
-
+        return (
+          <div class="container">
+            <div class="row">
+              <div class="col-md-offset-4 col-md-4">
+                {this.props.body}
+              </div>
+            </div>
+          </div>
+        );
       }
-    })
+    });
+
+    ReactDOM.render(
+      <TweetDisplay body="tweet..." />,
+      document.getElementById('tweet')
+    );
   </script>
 {% endblock page_scripts %}

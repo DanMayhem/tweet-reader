@@ -15,6 +15,12 @@ def _gen_key():
     random.choice(_key_chars),
   ])
 
+def find_campaign(key):
+  c = mongo.db.campaings.find_one({'_id': key})
+  if c is not None:
+    return Campaign(key)
+  return None
+
 class Campaign(object):
   """docstring for Campaign"""
   def __init__(self, key=None):
