@@ -38,8 +38,8 @@ def observe(key):
   flask.flash('campaign {key}'.format(key=c.key), 'success')
   return flask.render_template('observe.html', camp_key=key)
 
-def _wrap_tweets(camp):
-  ts = tweets.TweetStream()
+def _wrap_tweets(camp_key):
+  ts = tweets.tweet_stream(camp_key)
   for tweet in ts:
     yield 'data: {tweet_json}\n\n'.format(tweet_json=tweet)
 
@@ -48,4 +48,4 @@ def tweets(key):
   c = find_campaign(key)
   if c is None:
     flask.abort(404)
-  return flask.Response()
+  return flask.Response(_wrap_tweets(c.key), mimetype="text/event-stream")
