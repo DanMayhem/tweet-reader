@@ -8,10 +8,13 @@ from ..core import mongo
 from ..users import User
 
 class _StreamManager(object):
-  class _TweetReaderStreamListener(tweepy.StreamListen):
+  class _TweetReaderStreamListener(tweepy.StreamListener):
     def on_status(self, status):
-      mongo.db.update_one(
-        filter={'id': status.id},
+      mr = mongo.db.tweets.update_one(
+        filter={
+          'id': status.id,
+          'camp_key': self.camp_key,
+        },
         update={'$set': {
           'id': status.id,
           'text': status.text,
@@ -22,7 +25,11 @@ class _StreamManager(object):
         upsert=True
       )
 
-    def set_campaign(camp_key):
+      if mr.upserted_id is not None:
+        #publish tweet to redis
+        pass
+
+    def set_campaign(self, camp_key):
       self.camp_key = camp_key
 
   def __init__(self, camp_key):
@@ -31,7 +38,7 @@ class _StreamManager(object):
 
   def __enter__(self):
     #load campaign
-    camp = find_campaign(camp_key)
+    camp = find_campaign(self.camp_key)
     if camp is None:
       return self
 
@@ -41,8 +48,8 @@ class _StreamManager(object):
       return self
 
     #create/initialize handler
-    stream_listener = _TweetReaderStreamListener()
-    stream_listener.set_campaign(camp_key)
+    stream_listener = self._TweetReaderStreamListener()
+    stream_listener.set_campaign(self.camp_key)
 
     #authenticate
     auth = tweepy.OAuthHandler(
@@ -56,7 +63,7 @@ class _StreamManager(object):
     self.stream = tweepy.Stream(auth=api.auth, listener = stream_listener)
 
     #start streaming
-    self.stream.filter(track=camp.)
+    self.stream.filter(track=[camp.search,])
 
     return self
 

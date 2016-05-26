@@ -16,7 +16,7 @@ def _gen_key():
   ])
 
 def find_campaign(key):
-  c = mongo.db.campaings.find_one({'_id': key})
+  c = mongo.db.campaigns.find_one({'_id': key})
   if c is not None:
     return Campaign(key)
   return None
@@ -38,7 +38,7 @@ class Campaign(object):
       while (mongo.db.campaigns.find_one({'_id': self.key}) is not None):
         self.key = _gen_key()
 
-    c = mongo.db.campaings.find_one({'_id': self.key})
+    c = mongo.db.campaigns.find_one({'_id': self.key})
     if c is not None:
       self.search = c['search']
       self.latitude = c['latitude']
