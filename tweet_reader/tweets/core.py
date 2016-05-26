@@ -10,7 +10,7 @@ from ..users import User
 class _StreamManager(object):
   class _TweetReaderStreamListener(tweepy.StreamListener):
     def on_status(self, status):
-      mr = mongo.db.tweets.update_one(
+      mr = self.db.tweets.update_one(
         filter={
           'id': status.id,
           'camp_key': self.camp_key,
@@ -50,6 +50,7 @@ class _StreamManager(object):
     #create/initialize handler
     stream_listener = self._TweetReaderStreamListener()
     stream_listener.set_campaign(self.camp_key)
+    stream_listener.db = mongo.db
 
     #authenticate
     auth = tweepy.OAuthHandler(
@@ -63,7 +64,7 @@ class _StreamManager(object):
     self.stream = tweepy.Stream(auth=api.auth, listener = stream_listener)
 
     #start streaming
-    self.stream.filter(track=[camp.search,])
+    self.stream.filter(track=[camp.search,], async=True)
 
     return self
 
