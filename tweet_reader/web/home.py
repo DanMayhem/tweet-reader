@@ -6,7 +6,7 @@ import flask
 from flask.ext.login import login_required, current_user
 
 from ..campaigns import Campaign, find_campaign
-from ..tweets import twitter_stream_generator
+from ..tweets import TweetStream
 
 from .forms import CampaignForm
 
@@ -48,4 +48,4 @@ def tweets(key):
   c = find_campaign(key)
   if c is None:
     flask.abort(404)
-  return flask.Response(_wrap_tweets(c.key), mimetype="text/event-stream")
+  return flask.Response(TweetStream(c.key).event_stream(), mimetype="text/event-stream")

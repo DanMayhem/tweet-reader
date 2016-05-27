@@ -8,6 +8,20 @@ from ..core import mongo, redis
 from ..users import User
 
 class _StreamManager(object):
+  def __init__(self, camp_key):
+    self.camp_key = camp_key
+    self.stream = None
+
+def twitter_stream_generator(camp_key):
+  pubsub = redis.pubsub()
+  pubsub.subscribe(camp_key)
+  with _StreamManager(camp_key) as tweet_stream:
+    for msg in pubsub.listen():
+      if msg['type'] == 'message':
+        yield msg['data']
+
+
+class TweetStream(object):
   class _TweetReaderStreamListener(tweepy.StreamListener):
     def on_status(self, status):
       tweet_dict  = {
@@ -29,29 +43,29 @@ class _StreamManager(object):
       if mr.upserted_id is not None:
         #publish tweet to redis
         self.redis.publish(self.camp_key, json.dumps(tweet_dict))
-    def set_campaign(self, camp_key):
-      self.camp_key = camp_key
 
   def __init__(self, camp_key):
-    self.camp_key = camp_key
+    #grab everything from the app context
+    self.camp = find_campaign(camp_key)
+    self.db = mongo.db
+    self.redis = redis
+    self.user = User(self.camp.owner)
     self.stream = None
 
   def __enter__(self):
     #load campaign
-    camp = find_campaign(self.camp_key)
-    if camp is None:
+    if self.camp is None:
       return self
 
     #load the user who owns the campaign - the stream executes as them.
-    user = User(camp.owner)
-    if user.twitter_token is None:
+    if self.user.twitter_token is None:
       return self
 
     #create/initialize handler
     stream_listener = self._TweetReaderStreamListener()
-    stream_listener.set_campaign(self.camp_key)
-    stream_listener.db = mongo.db
-    stream_listener.redis = redis
+    stream_listener.camp_key = self.camp.key
+    stream_listener.db = self.db
+    stream_listener.redis = self.redis
 
     #authenticate
     auth = tweepy.OAuthHandler(
@@ -60,12 +74,12 @@ class _StreamManager(object):
     )
 
     #setup the stream
-    auth.set_access_token(user.twitter_token, user.twitter_secret)
+    auth.set_access_token(self.user.twitter_token, self.user.twitter_secret)
     api = tweepy.API(auth)
     self.stream = tweepy.Stream(auth=api.auth, listener = stream_listener)
 
     #start streaming
-    self.stream.filter(track=[camp.search,], async=True)
+    self.stream.filter(track=[self.camp.search,], async=True)
 
     return self
 
@@ -74,10 +88,15 @@ class _StreamManager(object):
       self.stream.disconnect()
       self.stream = None
 
-def twitter_stream_generator(camp_key):
-  pubsub = redis.pubsub()
-  pubsub.subscribe(camp_key)
-  with _StreamManager(camp_key) as tweet_stream:
-    for msg in pubsub.listen():
-      if msg['type'] == 'message':
-        yield msg['data']
+  def tweets(self):
+    #generator to produce stream of tweets
+    subscription = self.redis.pubsub()
+    subscription.subscribe(self.camp.key)
+    with self:
+      for msg in subscription.listen():
+        if msg['type'] == 'message':
+          yield msg['data']
+
+  def event_stream(self):
+    for t in self.tweets():
+      yield "data: {tweet}\n\n".format(tweet=t.decode('utf-8'))
