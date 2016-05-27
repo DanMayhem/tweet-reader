@@ -7,20 +7,6 @@ from ..campaigns import find_campaign
 from ..core import mongo, redis
 from ..users import User
 
-class _StreamManager(object):
-  def __init__(self, camp_key):
-    self.camp_key = camp_key
-    self.stream = None
-
-def twitter_stream_generator(camp_key):
-  pubsub = redis.pubsub()
-  pubsub.subscribe(camp_key)
-  with _StreamManager(camp_key) as tweet_stream:
-    for msg in pubsub.listen():
-      if msg['type'] == 'message':
-        yield msg['data']
-
-
 class TweetStream(object):
   class _TweetReaderStreamListener(tweepy.StreamListener):
     def on_status(self, status):
