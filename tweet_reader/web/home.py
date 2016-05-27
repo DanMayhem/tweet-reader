@@ -6,6 +6,7 @@ import flask
 from flask.ext.login import login_required, current_user
 
 from ..campaigns import Campaign, find_campaign
+from ..tweets import twitter_stream_generator
 
 from .forms import CampaignForm
 
@@ -39,8 +40,7 @@ def observe(key):
   return flask.render_template('observe.html', camp_key=key)
 
 def _wrap_tweets(camp_key):
-  ts = tweets.tweet_stream(camp_key)
-  for tweet in ts:
+  for tweet in twitter_stream_generator(camp_key):
     yield 'data: {tweet_json}\n\n'.format(tweet_json=tweet)
 
 @bp.route("/campaigns/<string:key>/tweets")

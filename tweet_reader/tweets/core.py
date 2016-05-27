@@ -1,34 +1,34 @@
 #!python
+import json
 import tweepy
 
 from os import environ
-
 from ..campaigns import find_campaign
-from ..core import mongo
+from ..core import mongo, redis
 from ..users import User
 
 class _StreamManager(object):
   class _TweetReaderStreamListener(tweepy.StreamListener):
     def on_status(self, status):
+      tweet_dict  = {
+        'id': status.id,
+        'text': status.text,
+        'username': status.user.screen_name,
+        'image_url': status.user.profile_image_url,
+        'camp_key': self.camp_key,
+      }
       mr = self.db.tweets.update_one(
         filter={
           'id': status.id,
           'camp_key': self.camp_key,
         },
-        update={'$set': {
-          'id': status.id,
-          'text': status.text,
-          'username': status.user.screen_name,
-          'image_url': status.user.profile_image_url,
-          'camp_key': self.camp_key,
-        }},
+        update={'$set': tweet_dict},
         upsert=True
       )
 
       if mr.upserted_id is not None:
         #publish tweet to redis
-        pass
-
+        self.redis.publish(self.camp_key, json.dumps(tweet_dict))
     def set_campaign(self, camp_key):
       self.camp_key = camp_key
 
@@ -51,6 +51,7 @@ class _StreamManager(object):
     stream_listener = self._TweetReaderStreamListener()
     stream_listener.set_campaign(self.camp_key)
     stream_listener.db = mongo.db
+    stream_listener.redis = redis
 
     #authenticate
     auth = tweepy.OAuthHandler(
@@ -73,8 +74,10 @@ class _StreamManager(object):
       self.stream.disconnect()
       self.stream = None
 
-
-
 def twitter_stream_generator(camp_key):
+  pubsub = redis.pubsub()
+  pubsub.subscribe(camp_key)
   with _StreamManager(camp_key) as tweet_stream:
-    yield tweet_stream.get_next_tweet()
+    for msg in pubsub.listen():
+      if msg['type'] == 'message':
+        yield msg['data']
