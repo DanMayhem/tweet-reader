@@ -36,7 +36,6 @@ def observe(key):
   if c is None:
     flask.flash('Invalid Campaign {key}'.format(key=key), 'danger')
     return flask.redirect(flask.url_for('.index'))
-  flask.flash('campaign {key}'.format(key=c.key), 'success')
   return flask.render_template('observe.html', camp_key=key)
 
 def _wrap_tweets(camp_key):
