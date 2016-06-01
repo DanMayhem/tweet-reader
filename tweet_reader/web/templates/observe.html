@@ -37,6 +37,12 @@
         //console.log('enqueue: '+e.data);
       },
 
+      cleanText: function(t){
+        return t.replace(/#/g,'hashtag ')          //say "hashtag"
+                .replace(/https?:\/\/\S+/ig, '')   //don't read urls
+                .replace(/brbtb/ig, "burb turb ") //pronouce the invisible r in brbtb
+      }
+
       checkQueue: function(){
         if (window.speechSynthesis.speaking){
           //console.log("speaking");
@@ -50,13 +56,15 @@
           return;
         }
 
-        //update wdiget
+        //update widget
         var tweet = this.q.dequeue();
-        console.log('dequeue: '+tweet);
+        //console.log('dequeue: '+tweet);
         this.replaceState(tweet);
 
         //read tweet
-        window.speechSynthesis.speak(new SpeechSynthesisUtterance(tweet.text));
+        window.speechSynthesis.speak(
+          new SpeechSynthesisUtterance(this.cleanText(tweet.text))
+        );
       },
 
       render: function() {
