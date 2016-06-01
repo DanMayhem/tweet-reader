@@ -14,7 +14,7 @@ bp = flask.Blueprint("home", __name__)
 
 @bp.route("/", methods=['GET','POST'])
 @bp.route("/index.html", methods=['GET','POST'])
-@bp.route("/index", methods=['GET','POST'])
+@bp.route("/index/", methods=['GET','POST'])
 def index():
   if current_user.is_authenticated:
     campaign_form = CampaignForm()
@@ -30,7 +30,7 @@ def index():
     return flask.render_template("home.html", form=campaign_form)
   return flask.render_template("landing.html")
 
-@bp.route("/observe/<string:key>")
+@bp.route("/observe/<string:key>/")
 def observe(key):
   c = find_campaign(key)
   if c is None:
@@ -43,7 +43,7 @@ def _wrap_tweets(camp_key):
   for tweet in twitter_stream_generator(camp_key):
     yield 'data: {tweet_json}\n\n'.format(tweet_json=tweet)
 
-@bp.route("/campaigns/<string:key>/tweets")
+@bp.route("/campaigns/<string:key>/tweets/")
 def tweets(key):
   c = find_campaign(key)
   if c is None:

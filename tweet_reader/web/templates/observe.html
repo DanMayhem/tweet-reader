@@ -14,27 +14,71 @@
   <script src="https://fb.me/react-15.1.0.js"></script>
   <script src="https://fb.me/react-dom-15.1.0.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+  <script src="{{url_for('static', filename='js/queue.js')}}"></script>
   <script type="text/babel">
     var TweetDisplay = React.createClass({
+      getInitialState: function() {
+        //initialize queue
+        this.q = new Queue();
+
+        //set up event source
+        this.source = new EventSource("{{url_for('home.tweets', key=camp_key)}}");
+        this.source.onmessage = this.processTweet;
+
+        //set up polling interval
+        window.setInterval(this.checkQueue, 500);
+
+        //return initial state
+        return ({id: 0});
+      },
+
+      processTweet: function(e){
+        this.q.enqueue(JSON.parse(e.data));
+        //console.log('enqueue: '+e.data);
+      },
+
+      checkQueue: function(){
+        if (window.speechSynthesis.speaking){
+          //console.log("speaking");
+          return;
+        }
+
+        //skip if queue is empty
+        if (this.q.isEmpty()){
+          //console.log('queue empty');
+          this.replaceState({id: 0});
+          return;
+        }
+
+        //update wdiget
+        var tweet = this.q.dequeue();
+        console.log('dequeue: '+tweet);
+        this.replaceState(tweet);
+
+        //read tweet
+        window.speechSynthesis.speak(new SpeechSynthesisUtterance(tweet.text));
+      },
+
       render: function() {
-        if this.state {
+        console.log('rendering: '+this.state.id)
+        if (this.state.id == 0) {
+            return( <div /> );
+        }else{
           return (
             <div class="container">
               <div class="row">
                 <div class="col-md-offset-4 col-md-4">
-                  {this.state.tweet.text}
+                  {this.state.text}
                 </div>
               </div>
             </div>
           );
-        }else{
-          return( <div /> );
         }
-      }
+      },
     });
 
     ReactDOM.render(
-      <TweetDisplay tweet={text: "tweet..."} />,
+      <TweetDisplay campaign="{{camp_key}}" />,
       document.getElementById('tweet')
     );
   </script>
