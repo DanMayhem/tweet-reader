@@ -1,4 +1,5 @@
 #!python
+import html
 import json
 import tweepy
 
@@ -42,7 +43,7 @@ class TweetStream(object):
 
       tweet_dict  = {
         'id': status.id,
-        'text': status.text,
+        'text': html.unescape(status.text),
         'username': status.user.screen_name,
         'image_url': status.user.profile_image_url,
         'camp_key': self.camp_key,
