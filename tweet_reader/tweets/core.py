@@ -14,9 +14,6 @@ class TweetStream(object):
   class _TweetReaderStreamListener(tweepy.StreamListener):
     def _skip_status(self, status):
       '''filters out statuses that are not in english, out of range or retweets'''
-      if status.lang != 'en':
-        return True
-
       if status.text.lower().startswith('rt'):
         return True
 
@@ -104,7 +101,11 @@ class TweetStream(object):
     self.stream = tweepy.Stream(auth=api.auth, listener = stream_listener)
 
     #start streaming
-    self.stream.filter(track=[self.camp.search,], async=True)
+    self.stream.filter(
+      track=[self.camp.search,],
+      languages=['en',],
+      async=True,
+    )
 
     return self
 
