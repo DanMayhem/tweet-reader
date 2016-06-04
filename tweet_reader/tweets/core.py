@@ -127,3 +127,14 @@ class TweetStream(object):
   def event_stream(self):
     for t in self.tweets():
       yield "data: {tweet}\n\n".format(tweet=t.decode('utf-8'))
+
+class TweetSearch(object):
+  def __init__(self, camp_key):
+    pass
+
+  def tweets(self):
+    pass
+
+  def event_stream(self):
+    pass
+    
