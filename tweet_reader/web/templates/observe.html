@@ -40,7 +40,7 @@
       cleanText: function(t){
         return t.replace(/#/g,'hashtag ')          //say "hashtag"
                 .replace(/https?:\/\/\S+/ig, '')   //don't read urls
-                .replace(/brbtb/ig, "burb turb ")  //pronouce the invisible r in brbtb
+                .replace(/brbtb/ig, "burb terb ")  //pronouce the invisible r in brbtb
       },
 
       checkQueue: function(){
@@ -73,9 +73,12 @@
             return( <div /> );
         }else{
           return (
-            <div class="container">
-              <div class="row">
-                <div class="col-md-offset-4 col-md-4">
+            <div className="container">
+              <div className="row">
+                <div className="col-md-4">
+                  <img src={this.state.image_url} />
+                </div>
+                <div className="col-md-4">
                   {this.state.text}
                 </div>
               </div>

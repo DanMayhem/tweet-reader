@@ -38,10 +38,6 @@ def observe(key):
     return flask.redirect(flask.url_for('.index'))
   return flask.render_template('observe.html', camp_key=key)
 
-def _wrap_tweets(camp_key):
-  for tweet in twitter_stream_generator(camp_key):
-    yield 'data: {tweet_json}\n\n'.format(tweet_json=tweet)
-
 @bp.route("/campaigns/<string:key>/tweets/")
 def tweets(key):
   c = find_campaign(key)
