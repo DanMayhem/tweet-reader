@@ -1,6 +1,8 @@
 #!python
 import html
 import json
+import time
+
 import tweepy
 
 from os import environ
@@ -115,18 +117,34 @@ class TweetStream(object):
       self.stream.disconnect()
       self.stream = None
 
-  def tweets(self):
+  def tweets(self, timeout=None):
     #generator to produce stream of tweets
     subscription = self.redis.pubsub()
     subscription.subscribe(self.camp.key)
+    last_yield = time.time()
     with self:
-      for msg in subscription.listen():
-        if msg['type'] == 'message':
-          yield msg['data']
+      while True:
+        msg = subscription.get_message()
+        while msg is not None:
+          if msg['type'] == 'message':
+            yield msg['data']
+            last_yield = time.time()
+          msg = subscription.get_message()
+        #when we get here we've drained the queue
+        #sleep for 1 second (should be configurable)
+        time.sleep(1)
+        if (timeout is not None) and ((time.time() - last_yield) > timeout):
+          #we haven't receive a message in a while, send a noop
+          yield None
+          last_yield = time.time()
+
 
   def event_stream(self):
-    for t in self.tweets():
-      yield "data: {tweet}\n\n".format(tweet=t.decode('utf-8'))
+    for t in self.tweets(5):
+      if t is not None:
+        yield "data: {tweet}\n\n".format(tweet=t.decode('utf-8'))
+      else:
+        yield "\n"
 
 class TweetSearch(object):
   def __init__(self, camp_key):
