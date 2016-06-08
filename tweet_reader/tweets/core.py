@@ -148,10 +148,25 @@ class TweetStream(object):
 
 class TweetSearch(object):
   def __init__(self, camp_key):
-    pass
+    #grab everything from the app context
+    self.camp = find_campaign(camp_key)
+    self.db = mongo.db
+    self.redis = redis
+    self.user = User(self.camp.owner)
+    self.stream = None
 
   def tweets(self):
-    pass
+    #authenticate
+    auth = tweepy.OAuthHandler(
+      environ.get('CONSUMER_KEY'),
+      environ.get('CONSUMER_SECRET'),
+    )
+
+    #setup the stream
+    auth.set_access_token(self.user.twitter_token, self.user.twitter_secret)
+    api = tweepy.API(auth)
+    self.stream = tweepy.Stream(auth=api.auth, listener = stream_listener)
+
 
   def event_stream(self):
     pass
