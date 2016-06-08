@@ -43,4 +43,7 @@ def tweets(key):
   c = find_campaign(key)
   if c is None:
     flask.abort(404)
-  return flask.Response(TweetStream(c.key).event_stream(), mimetype="text/event-stream")
+  return flask.Response(
+    TweetStream(c.key).event_stream(),
+    mimetype="text/event-stream"
+  )
