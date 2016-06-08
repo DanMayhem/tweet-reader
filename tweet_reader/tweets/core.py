@@ -18,22 +18,22 @@ class TweetStream(object):
       if status.text.lower().startswith('rt'):
         return True
 
-      if self.cos_range == 0.0:
-        return False #skip distance calc
+      #if self.cos_range == 0.0:
+      #  return False #skip distance calc
 
-      #extract lat/long from tweet
-      if status.coordinates is None:
-        return True
+      ##extract lat/long from tweet
+      #if status.coordinates is None:
+      #  return True
 
-      print ('has coords')
+      #print ('has coords')
 
-      lat = radians(status.coordinates['coordinates'][0])
-      lon = radians(status.coordinates['coordinates'][1])
-      print("{0}:{1}".format(lat, lon))
-      #calculate cos_d
-      cos_d = self.sin_lat*sin(lat)+self.cos_lat*cos(lat)*cos(self.long_rad-lon)
-      if cos_d < self.cos_range:
-        return True
+      #lat = radians(status.coordinates['coordinates'][0])
+      #lon = radians(status.coordinates['coordinates'][1])
+      #print("{0}:{1}".format(lat, lon))
+      ##calculate cos_d
+      #cos_d = self.sin_lat*sin(lat)+self.cos_lat*cos(lat)*cos(self.long_rad-lon)
+      #if cos_d < self.cos_range:
+      #  return True
 
       return False
 
@@ -137,4 +137,3 @@ class TweetSearch(object):
 
   def event_stream(self):
     pass
-    
