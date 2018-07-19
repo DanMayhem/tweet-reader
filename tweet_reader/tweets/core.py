@@ -7,6 +7,7 @@ import tweepy
 
 from os import environ
 from math import sin, cos, radians
+from profanityfilter import ProfanityFilter
 from ..campaigns import find_campaign
 from ..core import mongo, redis
 from ..users import User
@@ -16,26 +17,12 @@ _RADIUS_OF_EARTH = 3959.0
 class TweetStream(object):
   class _TweetReaderStreamListener(tweepy.StreamListener):
     def _skip_status(self, status):
-      '''filters out statuses that are not in english, out of range or retweets'''
+      '''filters out statuses that are profane or retweets'''
       if status.text.lower().startswith('rt'):
         return True
 
-      #if self.cos_range == 0.0:
-      #  return False #skip distance calc
-
-      ##extract lat/long from tweet
-      #if status.coordinates is None:
-      #  return True
-
-      #print ('has coords')
-
-      #lat = radians(status.coordinates['coordinates'][0])
-      #lon = radians(status.coordinates['coordinates'][1])
-      #print("{0}:{1}".format(lat, lon))
-      ##calculate cos_d
-      #cos_d = self.sin_lat*sin(lat)+self.cos_lat*cos(lat)*cos(self.long_rad-lon)
-      #if cos_d < self.cos_range:
-      #  return True
+      if ProfanityFilter().is_profane(status.text):
+        return True
 
       return False
 
