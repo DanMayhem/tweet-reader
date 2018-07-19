@@ -3,11 +3,11 @@
 from os import environ
 
 import flask
-import flask.ext.heroku
+import flask_heroku
 
-from flask.ext.login import LoginManager
-from flask.ext.pymongo import PyMongo
-from flask.ext.redis import FlaskRedis
+from flask_login import LoginManager
+from flask_pymongo import PyMongo
+from flask_redis import FlaskRedis
 from flask_oauthlib.client import OAuth
 from flask_sslify import SSLify
 
@@ -30,7 +30,7 @@ def create_app(package_name):
   #app.config['CONSUMER_SECRET'] = environ.get('CONSUMER_SECRET')
 
 
-  flask.ext.heroku.Heroku(app)
+  flask_heroku.Heroku(app)
 
   login_manager.init_app(app)
   oauth.init_app(app)

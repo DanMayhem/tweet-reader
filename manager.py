@@ -3,7 +3,7 @@
 Manager for flask-script
 """
 
-import flask.ext.script
+import flask_script
 
 from tweet_reader import mongo
 from tweet_reader.web import create_app
@@ -11,7 +11,7 @@ from tweet_reader.campaigns import find_campaign
 
 app = create_app()
 
-manager = flask.ext.script.Manager(app)
+manager = flask_script.Manager(app)
 
 @manager.command
 def list_users():

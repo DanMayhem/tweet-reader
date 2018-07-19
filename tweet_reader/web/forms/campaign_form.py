@@ -1,6 +1,6 @@
 #!python
 
-import flask.ext.wtf as w
+import flask_wtf as w
 import wtforms as f
 import wtforms.validators as v
 import wtforms.widgets

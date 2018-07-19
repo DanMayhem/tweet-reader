@@ -1,0 +1,27 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+flask = "*"
+flask-bootstrap = "*"
+flask-login = "*"
+flask-oauthlib = "*"
+flask-principal = "*"
+flask-redis = "*"
+flask-sslify = "*"
+flask-script = "*"
+flask-wtf = "*"
+flask-heroku = "*"
+pymongo = "*"
+redis = "*"
+six = "*"
+tweepy = "*"
+gunicorn = "*"
+flask-pymongo = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.6"

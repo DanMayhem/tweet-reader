@@ -3,13 +3,13 @@
 
 import os
 
-import flask.ext.login
+import flask_login
 
 import tweepy
 
 from ..core import mongo
 
-class User(flask.ext.login.UserMixin):
+class User(flask_login.UserMixin):
   def __init__(self, username):
     self.username = username
     self.twitter_token = None

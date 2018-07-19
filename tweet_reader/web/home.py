@@ -3,7 +3,7 @@
 
 import flask
 
-from flask.ext.login import login_required, current_user
+from flask_login import login_required, current_user
 
 from ..campaigns import Campaign, find_campaign
 from ..tweets import TweetStream
