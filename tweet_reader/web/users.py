@@ -5,7 +5,7 @@ import os
 
 import flask
 
-from flask_login import current_user, login_required
+from flask_login import current_user, login_required, logout_user, login_user
 
 from ..core import oauth
 from ..users import User
@@ -32,7 +32,7 @@ def login():
 @login_required
 @bp.route('/logout')
 def logout():
-  flask_login.logout_user()
+  logout_user()
   flask.flash('Logged out.', 'success')
   return flask.redirect(flask.url_for('.index'))
 
@@ -50,7 +50,7 @@ def authorized():
     u.fetch_twitter_details()
     u.save()
 
-    flask_login.login_user(u, remember=True)
+    login_user(u, remember=True)
 
   return flask.redirect(flask.url_for('users.index'))
 
