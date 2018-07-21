@@ -14,7 +14,7 @@ bp = flask.Blueprint('users', __name__)
 
 twitter_oauth = oauth.remote_app(
   'twitter',
-  request_token_url='https://api.twitter.com/oauth/request_token',
+  #request_token_url='https://api.twitter.com/oauth/request_token',
   access_token_url='https://api.twitter.com/oauth/access_token',
   authorize_url='https://api.twitter.com/oauth/authenticate',
   consumer_key=os.environ.get('CONSUMER_KEY'),
