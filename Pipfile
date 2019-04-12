@@ -23,6 +23,7 @@ profanityfilter = "*"
 oauthlib = "*"
 flask-oauthlib = "*"
 requests-oauthlib = "<1.2.0"
+jinja2 = ">=2.10.1"
 
 [dev-packages]
 
