@@ -41,7 +41,7 @@
         return t.replace(/#/g,'hashtag ')          //say "hashtag"
                 .replace(/https?:\/\/\S+/ig, '')   //don't read urls
                 .replace(/brbtb/ig, "burb terb ")  //pronouce the invisible r in brbtb
-                .replace(/COVID/g,'covid')         //say COVID instead of C-O-V-I-D
+                .replace(/COVID/ig,'covid ')         //say COVID instead of C-O-V-I-D
       },
 
       checkQueue: function(){
