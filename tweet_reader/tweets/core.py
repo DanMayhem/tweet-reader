@@ -94,7 +94,7 @@ class TweetStream(object):
     self.stream.filter(
       track=[self.camp.search,],
       languages=['en',],
-      async=True,
+      threaded=True,
     )
 
     return self
